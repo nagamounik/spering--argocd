@@ -1,0 +1,35 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-spering-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-spering
+  template:
+    metadata:
+      labels:
+        app: my-spering
+    spec:
+      containers:
+      - name: my-spering
+        image: acrdem.azurecr.io/nagamouniksperingmain:20
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+# service type loadbalancer       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-spering-svc
+spec:
+  selector:
+    app: my-spering
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
